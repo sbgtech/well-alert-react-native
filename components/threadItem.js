@@ -67,13 +67,13 @@ const styles = StyleSheet.create({
   },
   msgBloc: {
     maxWidth: "90%",
-    marginBottom: 10,
+    marginBottom: 6,
   },
   dateBloc: {
     flexDirection: "row",
     justifyContent: "space-between",
     maxWidth: "100%",
-    paddingRight: 4,
+    paddingRight: 3,
   },
   itemDate: { fontSize: 11, color: "grey" },
 });

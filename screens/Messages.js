@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
 import ChatBubble from "react-native-chat-bubble";
+import Moment from "moment";
 import { messages } from "../data";
 
 export default function Messages({ route }) {
@@ -15,6 +16,7 @@ export default function Messages({ route }) {
   };
   return (
     <View style={styles.container}>
+      <Text style={styles.name}>200413 Earl 591-4HM</Text>
       <FlatList
         ListEmptyComponent={handleEmpty}
         onRefresh={() => console.log("refreshing")}
@@ -30,6 +32,9 @@ export default function Messages({ route }) {
             style={styles.chatBubble}
           >
             <Text style={styles.text}>{item.body}</Text>
+            <Text style={styles.itemDate}>
+              {Moment(item.createdAt).format("lll")}
+            </Text>
           </ChatBubble>
         )}
       />
@@ -43,8 +48,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     padding: 20,
   },
-  chatBubble: {
-    padding: 10,
+  name: {
+    color: "#000",
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingBottom: 10,
+  },
+  // chatBubble: {
+  //   padding: 20,
+  //   backgroundColor: "red",
+  // },
+  text: {
+    padding: 5,
+  },
+  itemDate: {
+    fontSize: 11,
+    color: "grey",
+    paddingHorizontal: 5,
+    textAlign: "right",
   },
   emptyData: {
     padding: 15,

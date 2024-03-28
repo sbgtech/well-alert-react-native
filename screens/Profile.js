@@ -11,10 +11,22 @@ export const Profile = ({ navigation }) => {
         avatarStyle={styles.itemAvatar}
         size={80}
       />
-      <Text style={styles.text}>Firstname : Dhaker</Text>
-      <Text style={styles.text}>Lastname : Salah</Text>
-      <Text style={styles.text}>Email : Dhaker@gmail.com</Text>
-      <Text style={styles.text}>Phone number : +156478865</Text>
+      <View>
+        <Text style={styles.label}>First name</Text>
+        <Text style={styles.text}>Dhaker</Text>
+      </View>
+      <View>
+        <Text style={styles.label}>Last name</Text>
+        <Text style={styles.text}>Salah</Text>
+      </View>
+      <View>
+        <Text style={styles.label}>Email</Text>
+        <Text style={styles.text}>Dhaker@gmail.com</Text>
+      </View>
+      <View>
+        <Text style={styles.label}>Phone number</Text>
+        <Text style={styles.text}>+156478865</Text>
+      </View>
       <ButtonUI
         onPress={() => navigation.navigate("EditProfile")}
         title={"Edit profile"}
@@ -33,26 +45,26 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   itemAvatar: {
-    width: 90,
-    height: 90,
+    width: 85,
+    height: 85,
     borderRadius: 50,
     marginTop: 10,
     marginBottom: 20,
     marginLeft: "auto",
     marginRight: "auto",
   },
+  label: {
+    color: "grey",
+    fontSize: 16,
+  },
   text: {
-    width: "100%",
-    padding: 14,
-    borderWidth: 0.5,
-    borderRadius: 15,
-    borderColor: "#979797",
+    paddingTop: 5,
   },
   btnEdit: {
     marginTop: "auto",
     marginBottom: 15,
     backgroundColor: "#35374B",
-    borderRadius: 15,
+    borderRadius: 9,
     minHeight: 50,
   },
   txtBtnEdit: { color: "#fff", fontSize: 16 },
