@@ -5,7 +5,11 @@ import ButtonUI from "../components/ButtonUI";
 
 export const EditProfile = ({ navigation }) => {
   return (
-    <KeyboardAwareScrollView enableOnAndroid extraHeight={120}>
+    <KeyboardAwareScrollView
+      enableOnAndroid
+      extraHeight={120}
+      style={{ backgroundColor: "#fff" }}
+    >
       <View style={styles.container}>
         <View>
           <Text style={styles.text}>First name</Text>
@@ -17,14 +21,14 @@ export const EditProfile = ({ navigation }) => {
         </View>
         <View>
           <Text style={styles.text}>Email</Text>
-          <TextInput style={styles.textInpute} value={"dhaker@gmail.com"} />
+          <TextInput style={styles.textInput} value={"dhaker@gmail.com"} />
         </View>
         <View>
           <Text style={styles.text}>Phone number</Text>
-          <TextInput style={styles.textInpute} value={"+156478865"} />
+          <TextInput style={styles.textInput} value={"+156478865"} />
         </View>
         <ButtonUI
-          onPress={() => navigation.navigate("Profile")}
+          onPress={() => navigation.navigate("profile")}
           title={"Save profile"}
           textStyle={styles.txtBtnSave}
           btnStyle={styles.btnSave}
@@ -38,25 +42,17 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     flex: 1,
-    // backgroundColor: "gold",
+    backgroundColor: "fff",
     // height: Dimensions.get("screen").height,
   },
   text: {
     color: "grey",
     marginBottom: 4,
     paddingLeft: 6,
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "bold",
   },
   textInput: {
-    width: "100%",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderWidth: 0.5,
-    borderRadius: 9,
-    borderColor: "#979797",
-    marginBottom: 25,
-  },
-  textInpute: {
     width: "100%",
     paddingVertical: 8,
     paddingHorizontal: 12,

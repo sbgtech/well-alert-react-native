@@ -28,7 +28,7 @@ export const Profile = ({ navigation }) => {
         <Text style={styles.text}>+156478865</Text>
       </View>
       <ButtonUI
-        onPress={() => navigation.navigate("EditProfile")}
+        onPress={() => navigation.navigate("editProfile")}
         title={"Edit profile"}
         textStyle={styles.txtBtnEdit}
         btnStyle={styles.btnEdit}

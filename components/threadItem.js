@@ -11,7 +11,7 @@ export default function ThreadItem({ navigation, item }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("Messages", {
+        navigation.navigate("messages", {
           conversation_id: item.id,
         });
       }}

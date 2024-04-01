@@ -41,7 +41,7 @@ export const VerifyOTP = ({ navigation }) => {
             onTextChange={(text) => console.log(text)}
             onFilled={(text) => {
               console.log(`OTP is ${text}`);
-              navigation.navigate("Notifications");
+              navigation.navigate("notifications");
             }}
             theme={{
               containerStyle: styles.containerInputs,

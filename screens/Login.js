@@ -73,7 +73,7 @@ export const Login = ({ navigation }) => {
               const checkValid = phoneInput.current?.isValidNumber(value);
               setShowMessage(true);
               setValid(checkValid ? checkValid : false);
-              navigation.navigate("VerifyOTP");
+              navigation.navigate("verifyOTP");
             }}
             title={"Log In"}
             textStyle={styles.txtBtnLogin}
