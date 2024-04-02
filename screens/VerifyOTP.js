@@ -27,7 +27,7 @@ export const VerifyOTP = ({ navigation }) => {
             alt="App Logo"
             resizeMode="contain"
             style={styles.headerImg}
-            source={require("../assets/images/otp.png")}
+            source={require("../assets/otp.png")}
           />
           <Text style={styles.title}>Enter verification code</Text>
           <Text style={styles.subtitle}>

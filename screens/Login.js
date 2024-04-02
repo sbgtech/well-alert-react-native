@@ -32,7 +32,7 @@ export const Login = ({ navigation }) => {
             alt="App Logo"
             resizeMode="contain"
             style={styles.headerImg}
-            source={require("../assets/images/logo.png")}
+            source={require("../assets/icon.png")}
           />
           <View>
             <Text style={styles.title}>
@@ -64,7 +64,6 @@ export const Login = ({ navigation }) => {
               onChangeFormattedText={(text) => {
                 setFormattedValue(text);
               }}
-              autoFocus
             />
           </View>
           <ButtonUI
