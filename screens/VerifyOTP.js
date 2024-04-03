@@ -11,8 +11,16 @@ import {
   Platform,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
+import { useDispatch } from "react-redux";
+import { verifyOTP } from "../store/actions";
 
-export const VerifyOTP = ({ navigation }) => {
+export const VerifyOTP = ({ navigation, route }) => {
+  const { phone_number, country_code, fcm_token } = route.params;
+
+  const dispatch = useDispatch();
+  const handleSubmit = async (otp) => {
+    dispatch(verifyOTP(navigation, phone_number, country_code, fcm_token, otp));
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -35,14 +43,11 @@ export const VerifyOTP = ({ navigation }) => {
             phone number
           </Text>
           <OtpInput
+            autoFocus={false}
             numberOfDigits={4}
             focusColor="#35374B"
             focusStickBlinkingDuration={500}
-            onTextChange={(text) => console.log(text)}
-            onFilled={(text) => {
-              console.log(`OTP is ${text}`);
-              navigation.navigate("notifications");
-            }}
+            onFilled={handleSubmit}
             theme={{
               containerStyle: styles.containerInputs,
               inputsContainerStyle: styles.inputsContainer,

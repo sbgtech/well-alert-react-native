@@ -2,8 +2,15 @@ import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import ButtonUI from "../components/ButtonUI";
 import AvatarUI from "../components/AvatarUI";
+import { useSelector } from "react-redux";
 
 export const Profile = ({ navigation }) => {
+  const auth = useSelector((state) => state.user);
+  if (!auth.user) {
+    return null;
+  }
+  const { name, email } = auth.user;
+
   return (
     <View style={styles.container}>
       <AvatarUI
@@ -13,7 +20,7 @@ export const Profile = ({ navigation }) => {
       />
       <View>
         <Text style={styles.label}>First name</Text>
-        <Text style={styles.text}>Dhaker</Text>
+        <Text style={styles.text}>{name}</Text>
       </View>
       <View>
         <Text style={styles.label}>Last name</Text>
@@ -21,7 +28,7 @@ export const Profile = ({ navigation }) => {
       </View>
       <View>
         <Text style={styles.label}>Email</Text>
-        <Text style={styles.text}>Dhaker@gmail.com</Text>
+        <Text style={styles.text}>{email}</Text>
       </View>
       <View>
         <Text style={styles.label}>Phone number</Text>

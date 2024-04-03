@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -11,6 +11,7 @@ import {
 import ThreadItem from "../components/threadItem";
 import AddThread from "../components/addThread";
 import { threads } from "../data";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Threads({ navigation }) {
   const [conversation, setConversation] = useState(threads);
@@ -42,6 +43,15 @@ export default function Threads({ navigation }) {
   const handleEmpty = () => {
     return <Text style={styles.emptyData}> No threads present!</Text>;
   };
+
+  const getData = async () => {
+    const token = await AsyncStorage.getItem("token");
+    console.log("hs", token);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

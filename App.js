@@ -13,6 +13,8 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import Entypo from "@expo/vector-icons/Entypo";
 import React, { useState, useCallback, useEffect } from "react";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -55,60 +57,62 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
-      <Stack.Navigator initialRouteName="login">
-        <Stack.Screen
-          name="login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="verifyOTP"
-          component={VerifyOTP}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({
-            header: () => (
-              <Header title={"Notifications"} navigation={navigation} />
-            ),
-          })}
-          name="notifications"
-          component={Threads}
-        />
-        <Stack.Screen
-          name="messages"
-          component={Messages}
-          options={() => ({
-            headerStyle: { backgroundColor: "#35374B" },
-            headerTintColor: "#fff",
-            title: "Messages",
-          })}
-        />
-        <Stack.Screen
-          name="profile"
-          component={Profile}
-          options={({ navigation }) => ({
-            title: "Profile",
-            headerStyle: { backgroundColor: "#35374B" },
-            headerTintColor: "#fff",
-            headerRight: () => (
-              <Pressable onPress={() => navigation.navigate("notifications")}>
-                <Icon name="sign-out" size={30} color="#fff" />
-              </Pressable>
-            ),
-          })}
-        />
-        <Stack.Screen
-          options={() => ({
-            headerStyle: { backgroundColor: "#35374B" },
-            headerTintColor: "#fff",
-            title: "Edit profile",
-          })}
-          name="editProfile"
-          component={EditProfile}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer onReady={onLayoutRootView}>
+        <Stack.Navigator initialRouteName="login">
+          <Stack.Screen
+            name="login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="verifyOTP"
+            component={VerifyOTP}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            options={({ navigation }) => ({
+              header: () => (
+                <Header title={"Notifications"} navigation={navigation} />
+              ),
+            })}
+            name="notifications"
+            component={Threads}
+          />
+          <Stack.Screen
+            name="messages"
+            component={Messages}
+            options={() => ({
+              headerStyle: { backgroundColor: "#35374B" },
+              headerTintColor: "#fff",
+              title: "Messages",
+            })}
+          />
+          <Stack.Screen
+            name="profile"
+            component={Profile}
+            options={({ navigation }) => ({
+              title: "Profile",
+              headerStyle: { backgroundColor: "#35374B" },
+              headerTintColor: "#fff",
+              headerRight: () => (
+                <Pressable onPress={() => navigation.navigate("notifications")}>
+                  <Icon name="sign-out" size={30} color="#fff" />
+                </Pressable>
+              ),
+            })}
+          />
+          <Stack.Screen
+            options={() => ({
+              headerStyle: { backgroundColor: "#35374B" },
+              headerTintColor: "#fff",
+              title: "Edit profile",
+            })}
+            name="editProfile"
+            component={EditProfile}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
