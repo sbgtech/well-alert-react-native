@@ -1,8 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import AvatarUI from "./AvatarUI";
+import { useSelector } from "react-redux";
 
 export const Header = ({ title, navigation }) => {
+  const auth = useSelector((state) => state.user);
+  if (!auth.user) {
+    return null;
+  }
   return (
     <View
       style={{
@@ -23,7 +28,7 @@ export const Header = ({ title, navigation }) => {
 
       <Pressable onPress={() => navigation.navigate("profile")}>
         <AvatarUI
-          name={"Dhaker Salah"}
+          name={auth.user.name}
           avatarStyle={styles.itemAvatar}
           size={45}
         />

@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, TextInput, Text } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ButtonUI from "../components/ButtonUI";
+import { useSelector } from "react-redux";
 
 export const EditProfile = ({ navigation }) => {
+  const auth = useSelector((state) => state.user);
+  if (!auth.user) {
+    return null;
+  }
+  const { name, email, country_code, phone_number } = auth.user;
+
+  const [username, setUsername] = useState(name);
+  const [useremail, setUseremail] = useState(email);
+
+  const onNameChanged = (e) => {
+    setUsername(e);
+    console.log(e);
+  };
+  const onEmailChanged = (e) => {
+    setUseremail(e);
+    console.log(e);
+  };
   return (
     <KeyboardAwareScrollView
       enableOnAndroid
@@ -12,20 +30,36 @@ export const EditProfile = ({ navigation }) => {
     >
       <View style={styles.container}>
         <View>
-          <Text style={styles.text}>First name</Text>
-          <TextInput style={styles.textInput} value={"Dhaker"} />
-        </View>
-        <View>
-          <Text style={styles.text}>Last name</Text>
-          <TextInput style={styles.textInput} value={"Salah"} />
+          <Text style={styles.text}>Name</Text>
+          <TextInput
+            style={styles.textInput}
+            value={username}
+            onChangeText={onNameChanged}
+          />
         </View>
         <View>
           <Text style={styles.text}>Email</Text>
-          <TextInput style={styles.textInput} value={"dhaker@gmail.com"} />
+          <TextInput
+            style={styles.textInput}
+            value={useremail}
+            onChangeText={onEmailChanged}
+          />
+        </View>
+        <View>
+          <Text style={styles.text}>Country code</Text>
+          <TextInput
+            style={styles.textInput}
+            value={country_code}
+            editable={false}
+          />
         </View>
         <View>
           <Text style={styles.text}>Phone number</Text>
-          <TextInput style={styles.textInput} value={"+156478865"} />
+          <TextInput
+            style={styles.textInput}
+            value={phone_number}
+            editable={false}
+          />
         </View>
         <ButtonUI
           onPress={() => navigation.navigate("profile")}
