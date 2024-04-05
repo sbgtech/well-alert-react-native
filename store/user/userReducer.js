@@ -1,4 +1,4 @@
-import TYPE from "./type";
+import TYPE from "./types";
 
 const initialState = {
   user: null,
@@ -17,6 +17,16 @@ const user = (state = initialState, action) => {
       return {
         user: null,
         isLogged: false,
+      };
+    case TYPE.SET_PROFILE_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        isLogged: true,
+      };
+    case TYPE.SET_PROFILE_FAIL:
+      return {
+        ...state,
       };
     default:
       return state;

@@ -1,0 +1,6 @@
+const TYPE = {
+  GET_THREAD_SUCCESS: "GET_THREAD_SUCCESS",
+  GET_THREAD_FAIL: "GET_THREAD_FAIL",
+};
+
+export default TYPE;

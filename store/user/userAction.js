@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import TYPE from "./type";
+import TYPE from "./types";
 import axios from "axios";
 import { Alert } from "react-native";
 
@@ -67,6 +67,43 @@ export const verifyOTP =
       });
     }
   };
+
+export const editProfile = (navigation, data) => async (dispatch) => {
+  try {
+    // const data = {name, email, phone_number, country_code};
+    const res = await axios({
+      baseURL: "https://well-alert-api.s2c.io/v1",
+      method: "patch",
+      url: "/profile",
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      },
+      data,
+    });
+    dispatch({
+      type: TYPE.SET_PROFILE_SUCCESS,
+      payload: res.data,
+    });
+    Alert.alert("Success", "Profile updated successfully");
+    navigation.navigate("profile");
+  } catch (error) {
+    const err = error.response.data.error;
+    let msg = "An error came up";
+    if ("email" in err) {
+      msg = err.email;
+    }
+    if ("name" in err) {
+      msg = err.name;
+    }
+    if (typeof err === "string") {
+      msg = err;
+    }
+    Alert.alert("Error", msg);
+    dispatch({
+      type: TYPE.SET_PROFILE_FAIL,
+    });
+  }
+};
 
 export const Logout = () => {
   return async (dispatch) => {

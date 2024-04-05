@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import { StyleSheet, View, TextInput, Text } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ButtonUI from "../components/ButtonUI";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { editProfile } from "../store/user/userAction";
 
 export const EditProfile = ({ navigation }) => {
   const auth = useSelector((state) => state.user);
-  if (!auth.user) {
-    return null;
-  }
   const { name, email, country_code, phone_number } = auth.user;
-
   const [username, setUsername] = useState(name);
   const [useremail, setUseremail] = useState(email);
 
@@ -21,6 +18,10 @@ export const EditProfile = ({ navigation }) => {
   const onEmailChanged = (e) => {
     setUseremail(e);
     console.log(e);
+  };
+  const dispatch = useDispatch();
+  const onEditProfileSubmit = async () => {
+    dispatch(editProfile(navigation, { name: username, email: useremail }));
   };
   return (
     <KeyboardAwareScrollView
@@ -62,7 +63,7 @@ export const EditProfile = ({ navigation }) => {
           />
         </View>
         <ButtonUI
-          onPress={() => navigation.navigate("profile")}
+          onPress={onEditProfileSubmit}
           title={"Save profile"}
           textStyle={styles.txtBtnSave}
           btnStyle={styles.btnSave}

@@ -12,7 +12,7 @@ import {
 import PhoneInput from "react-native-phone-number-input";
 import ButtonUI from "../components/ButtonUI";
 import { useDispatch } from "react-redux";
-import { login } from "../store/actions";
+import { login } from "../store/user/userAction";
 
 export const Login = ({ navigation }) => {
   const [phone_number, setPhone_number] = useState("");

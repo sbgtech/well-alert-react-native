@@ -7,9 +7,6 @@ import Moment from "moment";
 
 export const Profile = ({ navigation }) => {
   const auth = useSelector((state) => state.user);
-  if (!auth.user) {
-    return null;
-  }
   const { name, email, country_code, phone_number, createdAt } = auth.user;
   const created = Moment(createdAt).format("lll");
   return (

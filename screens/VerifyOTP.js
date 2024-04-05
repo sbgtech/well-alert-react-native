@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { useDispatch } from "react-redux";
-import { verifyOTP } from "../store/actions";
+import { verifyOTP } from "../store/user/userAction";
 
 export const VerifyOTP = ({ navigation, route }) => {
   const { phone_number, country_code, fcm_token } = route.params;
