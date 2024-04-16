@@ -1,0 +1,6 @@
+const TYPE = {
+  GET_MESSAGE_SUCCESS: "GET_MESSAGE_SUCCESS",
+  GET_MESSAGE_FAIL: "GET_MESSAGE_FAIL",
+};
+
+export default TYPE;

@@ -13,6 +13,7 @@ export default function ThreadItem({ navigation, item }) {
       onPress={() => {
         navigation.navigate("messages", {
           conversation_id: item.id,
+          device_name: item.device.name,
         });
       }}
     >
@@ -27,9 +28,19 @@ export default function ThreadItem({ navigation, item }) {
             </Text>
           </View>
           <View style={styles.msgBloc}>
-            <Text numberOfLines={1} style={styles.itemMsg}>
+            <Text
+              numberOfLines={1}
+              style={
+                item._count.message > 0
+                  ? styles.itemMsgUnreaded
+                  : styles.itemMsgReaded
+              }
+            >
               {item.message[0].body}
             </Text>
+            {item._count.message > 0 && (
+              <Text style={styles.unreadMsg}>{item._count.message}</Text>
+            )}
           </View>
           <View style={styles.dateBloc}>
             <Text style={styles.itemDate}>{momentFormatL}</Text>
@@ -68,6 +79,23 @@ const styles = StyleSheet.create({
   msgBloc: {
     maxWidth: "90%",
     marginBottom: 6,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  itemMsgReaded: {
+    fontWeight: "100",
+  },
+  itemMsgUnreaded: {
+    fontWeight: "bold",
+  },
+  unreadMsg: {
+    fontSize: 12,
+    textAlign: "center",
+    backgroundColor: "red",
+    color: "#fff",
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
   dateBloc: {
     flexDirection: "row",

@@ -13,11 +13,9 @@ export const EditProfile = ({ navigation }) => {
 
   const onNameChanged = (e) => {
     setUsername(e);
-    console.log(e);
   };
   const onEmailChanged = (e) => {
     setUseremail(e);
-    console.log(e);
   };
   const dispatch = useDispatch();
   const onEditProfileSubmit = async () => {

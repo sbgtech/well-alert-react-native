@@ -70,9 +70,6 @@ export const Login = ({ navigation }) => {
               onChangeText={(text) => {
                 setPhone_number(text);
               }}
-              // onChangeFormattedText={(text) => {
-              //   setFormattedValue(text);
-              // }}
             />
           </View>
           <ButtonUI

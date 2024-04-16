@@ -7,10 +7,12 @@ import {
 import { thunk } from "redux-thunk";
 import user from "./user/userReducer";
 import thread from "./thread/threadReducer";
+import message from "./message/messageReducer";
 
 const RootReducers = combineReducers({
   user,
   thread,
+  message,
 });
 
 const middleware = [thunk];

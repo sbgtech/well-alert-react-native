@@ -1,31 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
 import ChatBubble from "react-native-chat-bubble";
 import Moment from "moment";
-import { messages } from "../data";
+import { useDispatch, useSelector } from "react-redux";
+import { getMessages } from "../store/message/messageAction";
 
 export default function Messages({ route }) {
-  const { conversation_id } = route.params;
-  const [conversationMessages, setConversationMessages] = useState(
-    messages.filter((msg) => {
-      return msg.conversation_id === conversation_id;
-    })
-  );
+  const { conversation_id, device_name } = route.params;
+  const messages = useSelector((state) => state.message);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getMessages(conversation_id));
+  }, []);
   const handleEmpty = () => {
     return <Text style={styles.emptyData}> No messages!</Text>;
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>200413 Earl 591-4HM</Text>
+      <Text style={styles.name}>{device_name}</Text>
       <FlatList
         ListEmptyComponent={handleEmpty}
         onRefresh={() => console.log("refreshing")}
         refreshing={false}
-        data={conversationMessages}
+        data={messages.messages}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ChatBubble
-            onPress={() => Alert.alert("conversation_id", conversation_id)}
+            onPress={() =>
+              Alert.alert("Read at", Moment(item.readAt).format("lll"))
+            }
             isOwnMessage={false}
             bubbleColor="lightgrey"
             withTail={true}
