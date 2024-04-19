@@ -21,7 +21,7 @@ export const Login = ({ navigation }) => {
   const phoneInput = useRef(null);
   const country_code = "+" + phoneInput.current?.getCallingCode(phone_number);
   const fcm_token =
-    "9RqZRqy5qkVRAn-prm:APA91bFDfkueFW_SHH2CAEHy6dzD5dAIlXYxzIa6y3VMdOH8T72fypeW9ovcOChvp5gagpMuP3PhlW2j9PD";
+    "fViNh_vBTECIsHwszCINYh:APA91bEeXoe5Z3VB6rd5g72ug6Ln8udSuGEtz5P1bxP7Y4TRdll5TB8eCdBpddOYVzot4zoLb6ThxcM1qXJfLczhFsrb7Ky0dixF7FNwoR7w4p8IEK-_jA1UetSdutKwvpSEbbWEwoG6";
   const dispatch = useDispatch();
   const handleSubmit = async () => {
     dispatch(login(navigation, phone_number, country_code, fcm_token));

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,18 +9,48 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { useDispatch } from "react-redux";
 import { verifyOTP } from "../store/user/userAction";
+import Toast from "react-native-toast-message";
 
 export const VerifyOTP = ({ navigation, route }) => {
-  const { phone_number, country_code, fcm_token } = route.params;
-
+  const [isIndicatorShown, setIsIndicatorShown] = useState(false);
+  const { phone_number, country_code, fcm_token, otp } = route.params;
   const dispatch = useDispatch();
   const handleSubmit = async (otp) => {
-    dispatch(verifyOTP(navigation, phone_number, country_code, fcm_token, otp));
+    setIsIndicatorShown(true);
+    setTimeout(() => {
+      dispatch(
+        verifyOTP(navigation, phone_number, country_code, fcm_token, otp)
+      );
+    }, 1000);
   };
+
+  const otpInputRef = useRef();
+
+  useEffect(() => {
+    const fillOTPInput = setTimeout(() => {
+      otpInputRef.current.setValue(`${otp}`);
+    }, 2900);
+    Toast.show({
+      type: "success",
+      text1: "You will receive your otp in few seconds",
+    });
+    const otpToast = setTimeout(() => {
+      Toast.show({
+        type: "success",
+        text1: "Your OPT is " + otp,
+      });
+    }, 2200);
+    return () => {
+      clearTimeout(otpToast);
+      clearTimeout(fillOTPInput);
+    };
+  }, []);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -43,6 +73,7 @@ export const VerifyOTP = ({ navigation, route }) => {
             phone number
           </Text>
           <OtpInput
+            ref={otpInputRef}
             autoFocus={false}
             numberOfDigits={4}
             focusColor="#35374B"
@@ -58,11 +89,20 @@ export const VerifyOTP = ({ navigation, route }) => {
             }}
           />
           <TouchableOpacity style={styles.resendContainer}>
-            <Text>Don't receive the code ?</Text>
+            <Text>Didn't receive the code ?</Text>
             <TouchableOpacity>
               <Text style={styles.resend}>Resend code</Text>
             </TouchableOpacity>
           </TouchableOpacity>
+          <View style={styles.indicatorWrapper}>
+            {isIndicatorShown && (
+              <ActivityIndicator
+                size={50}
+                color={"#075eec"}
+                style={styles.loadingStyle}
+              />
+            )}
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -134,5 +174,11 @@ const styles = StyleSheet.create({
   resend: {
     color: "#075eec",
     fontWeight: "bold",
+  },
+  indicatorWrapper: {
+    height: 60,
+  },
+  loadingStyle: {
+    marginTop: 40,
   },
 });

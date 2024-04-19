@@ -15,17 +15,22 @@ export const login =
         data,
       });
       console.log(res.data);
-      Alert.alert("Success", "OTP sent to your phone");
-      navigation.navigate("verifyOTP", {
-        phone_number,
-        country_code,
-        fcm_token,
-      });
+      otp = res.data;
+      // Alert.alert("Success", "OTP sent to your phone");
       dispatch({
         type: TYPE.LOGIN_SUCCESS,
         payload: res.data,
       });
+      setTimeout(() => {
+        navigation.navigate("verifyOTP", {
+          phone_number,
+          country_code,
+          fcm_token,
+          otp,
+        });
+      }, 500);
     } catch (error) {
+      console.log(error.message);
       const err = error.response.data.error;
       let msg = "An error came up";
       if ("phone_number" in err) {
@@ -54,8 +59,7 @@ export const verifyOTP =
         data,
       });
       await AsyncStorage.setItem("token", res.data.token);
-      Alert.alert("Success", "Welcome to WellAlert");
-      navigation.navigate("notifications");
+      // await AsyncStorage.setItem("isLogged", JSON.stringify(true));
       dispatch({
         type: TYPE.VERIFY_SUCCESS,
         payload: res.data.user,
@@ -105,11 +109,46 @@ export const editProfile = (navigation, data) => async (dispatch) => {
   }
 };
 
-export const Logout = () => {
-  return async (dispatch) => {
+export const logout = () => async (dispatch) => {
+  try {
+    const res = await axios({
+      baseURL: "https://well-alert-api.s2c.io/v1",
+      method: "post",
+      url: "/logout",
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      },
+    });
     await AsyncStorage.clear();
     dispatch({
-      type: "LOGOUT",
+      type: TYPE.LOGOUT,
     });
-  };
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getProfile = () => async (dispatch) => {
+  try {
+    // throw new Error("hamza");
+    const res = await axios({
+      baseURL: "https://well-alert-api.s2c.io/v1",
+      method: "get",
+      url: "/profile",
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      },
+    });
+
+    dispatch({
+      type: TYPE.GET_PROFILE_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    // const err = error.response.data.error;
+    console.log("get profile ", error.message);
+    dispatch({
+      type: TYPE.GET_PROFILE_FAIL,
+    });
+  }
 };
