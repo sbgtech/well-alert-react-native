@@ -1,4 +1,4 @@
-import TYPE from "./types";
+import TYPE from "../types";
 
 const initialState = {
   threads: [],
@@ -15,6 +15,8 @@ const thread = (state = initialState, action) => {
       return {
         ...state,
       };
+    case TYPE.CLEAR_THREAD:
+      return initialState;
     default:
       return state;
   }

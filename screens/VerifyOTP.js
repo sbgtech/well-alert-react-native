@@ -34,7 +34,7 @@ export const VerifyOTP = ({ route }) => {
       otpInputRef.current.setValue(`${otp}`);
     }, 3500);
     Toast.show({
-      type: "success",
+      type: "info",
       text1: "You will receive your otp in few seconds",
     });
     const otpToast = setTimeout(() => {

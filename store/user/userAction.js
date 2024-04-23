@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import TYPE from "./types";
+import TYPE from "../types";
 import axios from "axios";
 import { Alert } from "react-native";
 
@@ -120,6 +120,12 @@ export const logout = () => async (dispatch) => {
     await AsyncStorage.clear();
     dispatch({
       type: TYPE.LOGOUT,
+    });
+    dispatch({
+      type: TYPE.CLEAR_THREAD,
+    });
+    dispatch({
+      type: TYPE.CLEAR_MSG,
     });
   } catch (error) {
     console.log(error.message);

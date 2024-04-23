@@ -1,4 +1,4 @@
-import TYPE from "./types";
+import TYPE from "../types";
 
 const initialState = {
   messages: [],
@@ -15,6 +15,8 @@ const message = (state = initialState, action) => {
       return {
         ...state,
       };
+    case TYPE.CLEAR_MSG:
+      return initialState;
     default:
       return state;
   }

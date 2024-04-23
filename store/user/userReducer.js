@@ -1,4 +1,4 @@
-import TYPE from "./types";
+import TYPE from "../types";
 
 const initialState = {
   user: null,
@@ -33,8 +33,9 @@ const user = (state = initialState, action) => {
       };
     case TYPE.LOGOUT:
       return {
-        ...state,
         user: null,
+        isLogged: false,
+        isLoading: false,
       };
     case TYPE.GET_PROFILE_FAIL:
       return {

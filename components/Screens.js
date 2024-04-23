@@ -49,12 +49,14 @@ export default function Screens({ fcmToken }) {
     prepare();
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log("Message handled in the foreground!", remoteMessage);
-      Toast.show({
-        type: "info",
-        text1: remoteMessage.notification.title,
-        text2: remoteMessage.notification.body,
-      });
-      dispatch(getThreads());
+      if (remoteMessage.notification.title !== "OTP") {
+        Toast.show({
+          type: "info",
+          text1: remoteMessage.notification.title,
+          text2: remoteMessage.notification.body,
+        });
+        dispatch(getThreads());
+      }
     });
 
     return unsubscribe;
