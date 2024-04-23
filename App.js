@@ -1,14 +1,12 @@
-import { Alert } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import messaging from "@react-native-firebase/messaging";
 import Screens from "./components/Screens";
 import Toast from "react-native-toast-message";
 
-// Keep the splash screen visible while we fetch resources
-
 export default function App() {
+  const [fcmToken, setFcmToken] = useState("");
   // firebase notification part
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
@@ -34,7 +32,8 @@ export default function App() {
       messaging()
         .getToken()
         .then((token) => {
-          console.log(token);
+          // console.log(token);
+          setFcmToken(token);
         });
     } else {
       console.log("Failed token status", authStatus);
@@ -62,22 +61,16 @@ export default function App() {
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log("Message handled in the background!", remoteMessage);
     });
+    // const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    //   console.log("Message handled in the foreground!", remoteMessage);
+    // });
 
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      console.log("Message handled in the foreground!", remoteMessage);
-      // Alert.alert(
-      //   "A new FCM message arrived!",
-      //   remoteMessage?.notification?.body
-      // );
-      // showToast();
-    });
-
-    return unsubscribe;
+    // return unsubscribe;
   }, []);
 
   return (
     <Provider store={store}>
-      <Screens />
+      <Screens fcmToken={fcmToken} />
       <Toast />
     </Provider>
   );

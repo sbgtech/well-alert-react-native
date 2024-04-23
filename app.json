@@ -13,7 +13,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sbg.well"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -30,6 +31,17 @@
       "eas": {
         "projectId": "2eecca5a-35d5-48ad-b831-d369aa2b0ea1"
       }
-    }
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
   }
 }

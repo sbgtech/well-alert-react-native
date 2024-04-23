@@ -16,7 +16,6 @@ export const login =
       });
       console.log(res.data);
       otp = res.data;
-      // Alert.alert("Success", "OTP sent to your phone");
       dispatch({
         type: TYPE.LOGIN_SUCCESS,
         payload: res.data,
@@ -47,8 +46,7 @@ export const login =
   };
 
 export const verifyOTP =
-  (navigation, phone_number, country_code, fcm_token, otp) =>
-  async (dispatch) => {
+  (phone_number, country_code, fcm_token, otp) => async (dispatch) => {
     try {
       const data = { phone_number, country_code, fcm_token, otp };
       const res = await axios({

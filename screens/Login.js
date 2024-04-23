@@ -14,17 +14,18 @@ import ButtonUI from "../components/ButtonUI";
 import { useDispatch } from "react-redux";
 import { login } from "../store/user/userAction";
 
-export const Login = ({ navigation }) => {
+export const Login = ({ navigation, fcmToken }) => {
   const [phone_number, setPhone_number] = useState("");
-  // const [country_code, setCountry_code] = useState("");
-  // const [formattedValue, setFormattedValue] = useState("");
+  const [disbledLogin, setDisbledLogin] = useState(false);
   const phoneInput = useRef(null);
   const country_code = "+" + phoneInput.current?.getCallingCode(phone_number);
-  const fcm_token =
-    "fViNh_vBTECIsHwszCINYh:APA91bEeXoe5Z3VB6rd5g72ug6Ln8udSuGEtz5P1bxP7Y4TRdll5TB8eCdBpddOYVzot4zoLb6ThxcM1qXJfLczhFsrb7Ky0dixF7FNwoR7w4p8IEK-_jA1UetSdutKwvpSEbbWEwoG6";
   const dispatch = useDispatch();
   const handleSubmit = async () => {
-    dispatch(login(navigation, phone_number, country_code, fcm_token));
+    setDisbledLogin(true);
+    dispatch(login(navigation, phone_number, country_code, fcmToken));
+    setTimeout(() => {
+      setDisbledLogin(false);
+    }, 1200);
   };
 
   return (
@@ -76,9 +77,13 @@ export const Login = ({ navigation }) => {
             onPress={() => {
               handleSubmit();
             }}
+            disabled={disbledLogin}
             title={"Log In"}
             textStyle={styles.txtBtnLogin}
-            btnStyle={styles.btnLogin}
+            btnStyle={[
+              styles.btnLogin,
+              ...(disbledLogin ? [styles.btnLoginDisbaled] : []),
+            ]}
           />
         </View>
       </TouchableWithoutFeedback>
@@ -153,6 +158,9 @@ const styles = StyleSheet.create({
     minHeight: 50,
     width: "100%",
     maxWidth: 480,
+  },
+  btnLoginDisbaled: {
+    backgroundColor: "#bababa",
   },
   txtBtnLogin: { color: "#fff", fontSize: 18 },
 });

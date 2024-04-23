@@ -10,6 +10,8 @@ import {
 import ThreadItem from "../components/threadItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getThreads } from "../store/thread/threadAction";
+import Icon from "react-native-vector-icons/FontAwesome";
+import ButtonUI from "../components/ButtonUI";
 
 export default function Threads({ navigation }) {
   // const [conversation, setConversation] = useState(threads);
@@ -20,7 +22,18 @@ export default function Threads({ navigation }) {
   }, []);
 
   const handleEmpty = () => {
-    return <Text style={styles.emptyData}> No threads present!</Text>;
+    return (
+      <View style={styles.emptyDataContainer}>
+        <Text style={styles.emptyData}> No threads present!</Text>
+        <ButtonUI
+          onPress={() => dispatch(getThreads())}
+          btnStyle={styles.btnRefresh}
+        >
+          <Text style={styles.textEmptyBtnRefresh}>Refresh </Text>
+          <Icon name="refresh" size={20} color="#fff" />
+        </ButtonUI>
+      </View>
+    );
   };
 
   return (
@@ -48,9 +61,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#f0f0f0",
   },
+  emptyDataContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   emptyData: {
-    padding: 15,
+    padding: 8,
     fontWeight: "bold",
-    textAlign: "center",
+  },
+  btnRefresh: {
+    flexDirection: "row",
+    backgroundColor: "#35374B",
+  },
+  textEmptyBtnRefresh: {
+    fontWeight: "bold",
+    color: "#fff",
   },
 });

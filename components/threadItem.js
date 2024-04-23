@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   itemMsgReaded: {
-    fontWeight: "100",
+    fontWeight: "300",
   },
   itemMsgUnreaded: {
     fontWeight: "bold",

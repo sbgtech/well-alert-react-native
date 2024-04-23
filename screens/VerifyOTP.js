@@ -16,17 +16,15 @@ import { useDispatch } from "react-redux";
 import { verifyOTP } from "../store/user/userAction";
 import Toast from "react-native-toast-message";
 
-export const VerifyOTP = ({ navigation, route }) => {
+export const VerifyOTP = ({ route }) => {
   const [isIndicatorShown, setIsIndicatorShown] = useState(false);
   const { phone_number, country_code, fcm_token, otp } = route.params;
   const dispatch = useDispatch();
   const handleSubmit = async (otp) => {
     setIsIndicatorShown(true);
     setTimeout(() => {
-      dispatch(
-        verifyOTP(navigation, phone_number, country_code, fcm_token, otp)
-      );
-    }, 1000);
+      dispatch(verifyOTP(phone_number, country_code, fcm_token, otp));
+    }, 2000);
   };
 
   const otpInputRef = useRef();
@@ -34,17 +32,17 @@ export const VerifyOTP = ({ navigation, route }) => {
   useEffect(() => {
     const fillOTPInput = setTimeout(() => {
       otpInputRef.current.setValue(`${otp}`);
-    }, 2900);
+    }, 3500);
     Toast.show({
       type: "success",
       text1: "You will receive your otp in few seconds",
     });
     const otpToast = setTimeout(() => {
       Toast.show({
-        type: "success",
+        type: "info",
         text1: "Your OPT is " + otp,
       });
-    }, 2200);
+    }, 2500);
     return () => {
       clearTimeout(otpToast);
       clearTimeout(fillOTPInput);

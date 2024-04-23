@@ -11,7 +11,11 @@ export const Profile = ({ navigation }) => {
   const created = Moment(createdAt).format("lll");
   return (
     <View style={styles.container}>
-      <AvatarUI name={name} avatarStyle={styles.itemAvatar} size={80} />
+      <AvatarUI
+        name={auth.user.name ? auth.user.name : auth.user.phone_number}
+        avatarStyle={styles.itemAvatar}
+        size={80}
+      />
       <View>
         <Text style={styles.label}>Name</Text>
         <Text style={styles.text}>{name}</Text>

@@ -26,9 +26,16 @@ export const Header = ({ title, navigation }) => {
         {title}
       </Text>
 
-      <Pressable onPress={() => navigation.navigate("profile")}>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.5 : 1,
+          },
+        ]}
+        onPress={() => navigation.navigate("profile")}
+      >
         <AvatarUI
-          name={auth.user.name}
+          name={auth.user.name ? auth.user.name : auth.user.phone_number}
           avatarStyle={styles.itemAvatar}
           size={45}
         />

@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Threads from "../screens/Threads";
 import Messages from "../screens/Messages";
-import { Pressable } from "react-native";
+import { StyleSheet } from "react-native";
 import { EditProfile } from "../screens/EditProfile";
 import { Profile } from "../screens/Profile";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -15,11 +15,15 @@ import { VerifyOTP } from "../screens/VerifyOTP";
 import { Header } from "./header";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile, logout } from "../store/user/userAction";
+import ButtonUI from "./ButtonUI";
+import messaging from "@react-native-firebase/messaging";
+import Toast from "react-native-toast-message";
+import { getThreads } from "../store/thread/threadAction";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
 
-export default function Screens() {
+export default function Screens({ fcmToken }) {
   const [appIsReady, setAppIsReady] = useState(false);
   const auth = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -43,6 +47,17 @@ export default function Screens() {
       }
     }
     prepare();
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log("Message handled in the foreground!", remoteMessage);
+      Toast.show({
+        type: "info",
+        text1: remoteMessage.notification.title,
+        text2: remoteMessage.notification.body,
+      });
+      dispatch(getThreads());
+    });
+
+    return unsubscribe;
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
@@ -90,14 +105,20 @@ export default function Screens() {
             <Stack.Screen
               name="profile"
               component={Profile}
-              options={({ navigation }) => ({
+              options={() => ({
                 title: "Profile",
                 headerStyle: { backgroundColor: "#35374B" },
                 headerTintColor: "#fff",
                 headerRight: () => (
-                  <Pressable onPress={() => dispatch(logout())}>
+                  <ButtonUI
+                    onPress={() => dispatch(logout())}
+                    btnStyle={styles.btnSignout}
+                  >
                     <Icon name="sign-out" size={30} color="#fff" />
-                  </Pressable>
+                  </ButtonUI>
+                  // <Pressable onPress={() => dispatch(logout())}>
+                  //   <Icon name="sign-out" size={30} color="#fff" />
+                  // </Pressable>
                 ),
               })}
             />
@@ -113,11 +134,14 @@ export default function Screens() {
           </>
         ) : (
           <>
-            <Stack.Screen
+            {/* <Stack.Screen
               name="login"
               component={Login}
               options={{ headerShown: false }}
-            />
+            /> */}
+            <Stack.Screen name="login" options={{ headerShown: false }}>
+              {(props) => <Login {...props} fcmToken={fcmToken} />}
+            </Stack.Screen>
             <Stack.Screen
               name="verifyOTP"
               component={VerifyOTP}
@@ -129,3 +153,9 @@ export default function Screens() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  btnSignout: {
+    paddingHorizontal: 0,
+  },
+});
