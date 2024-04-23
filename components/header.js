@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import AvatarUI from "./AvatarUI";
 import { useSelector } from "react-redux";
+import { StatusBar } from "expo-status-bar";
 
 export const Header = ({ title, navigation }) => {
   const auth = useSelector((state) => state.user);
@@ -22,6 +23,7 @@ export const Header = ({ title, navigation }) => {
         backgroundColor: "#35374B",
       }}
     >
+      <StatusBar style="light" />
       <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
         {title}
       </Text>
