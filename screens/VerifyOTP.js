@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,10 +9,46 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
+import { useDispatch } from "react-redux";
+import { verifyOTP } from "../store/user/userAction";
+import Toast from "react-native-toast-message";
 
-export const VerifyOTP = ({ navigation }) => {
+export const VerifyOTP = ({ route }) => {
+  const [isIndicatorShown, setIsIndicatorShown] = useState(false);
+  const { phone_number, country_code, fcm_token, otp } = route.params;
+  const dispatch = useDispatch();
+  const handleSubmit = async (otp) => {
+    setIsIndicatorShown(true);
+    setTimeout(() => {
+      dispatch(verifyOTP(phone_number, country_code, fcm_token, otp));
+    }, 2000);
+  };
+
+  const otpInputRef = useRef();
+
+  useEffect(() => {
+    const fillOTPInput = setTimeout(() => {
+      otpInputRef.current.setValue(`${otp}`);
+    }, 3500);
+    Toast.show({
+      type: "info",
+      text1: "You will receive your otp in few seconds",
+    });
+    const otpToast = setTimeout(() => {
+      Toast.show({
+        type: "info",
+        text1: "Your OPT is " + otp,
+      });
+    }, 2500);
+    return () => {
+      clearTimeout(otpToast);
+      clearTimeout(fillOTPInput);
+    };
+  }, []);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -27,7 +63,7 @@ export const VerifyOTP = ({ navigation }) => {
             alt="App Logo"
             resizeMode="contain"
             style={styles.headerImg}
-            source={require("../assets/images/otp.png")}
+            source={require("../assets/otp.png")}
           />
           <Text style={styles.title}>Enter verification code</Text>
           <Text style={styles.subtitle}>
@@ -35,14 +71,12 @@ export const VerifyOTP = ({ navigation }) => {
             phone number
           </Text>
           <OtpInput
+            ref={otpInputRef}
+            autoFocus={false}
             numberOfDigits={4}
             focusColor="#35374B"
             focusStickBlinkingDuration={500}
-            onTextChange={(text) => console.log(text)}
-            onFilled={(text) => {
-              console.log(`OTP is ${text}`);
-              navigation.navigate("notifications");
-            }}
+            onFilled={handleSubmit}
             theme={{
               containerStyle: styles.containerInputs,
               inputsContainerStyle: styles.inputsContainer,
@@ -53,11 +87,20 @@ export const VerifyOTP = ({ navigation }) => {
             }}
           />
           <TouchableOpacity style={styles.resendContainer}>
-            <Text>Don't receive the code ?</Text>
+            <Text>Didn't receive the code ?</Text>
             <TouchableOpacity>
               <Text style={styles.resend}>Resend code</Text>
             </TouchableOpacity>
           </TouchableOpacity>
+          <View style={styles.indicatorWrapper}>
+            {isIndicatorShown && (
+              <ActivityIndicator
+                size={50}
+                color={"#075eec"}
+                style={styles.loadingStyle}
+              />
+            )}
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -129,5 +172,11 @@ const styles = StyleSheet.create({
   resend: {
     color: "#075eec",
     fontWeight: "bold",
+  },
+  indicatorWrapper: {
+    height: 60,
+  },
+  loadingStyle: {
+    marginTop: 40,
   },
 });

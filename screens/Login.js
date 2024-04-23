@@ -11,13 +11,23 @@ import {
 } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import ButtonUI from "../components/ButtonUI";
+import { useDispatch } from "react-redux";
+import { login } from "../store/user/userAction";
 
-export const Login = ({ navigation }) => {
-  const [value, setValue] = useState("");
-  const [formattedValue, setFormattedValue] = useState("");
-  const [valid, setValid] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
+export const Login = ({ navigation, fcmToken }) => {
+  const [phone_number, setPhone_number] = useState("");
+  const [disbledLogin, setDisbledLogin] = useState(false);
   const phoneInput = useRef(null);
+  const country_code = "+" + phoneInput.current?.getCallingCode(phone_number);
+  const dispatch = useDispatch();
+  const handleSubmit = async () => {
+    setDisbledLogin(true);
+    dispatch(login(navigation, phone_number, country_code, fcmToken));
+    setTimeout(() => {
+      setDisbledLogin(false);
+    }, 1200);
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -32,7 +42,7 @@ export const Login = ({ navigation }) => {
             alt="App Logo"
             resizeMode="contain"
             style={styles.headerImg}
-            source={require("../assets/images/logo.png")}
+            source={require("../assets/icon.png")}
           />
           <View>
             <Text style={styles.title}>
@@ -56,28 +66,24 @@ export const Login = ({ navigation }) => {
               }}
               defaultCode="CA"
               ref={phoneInput}
-              defaultValue={value}
+              defaultValue={phone_number}
               layout="first"
               onChangeText={(text) => {
-                setValue(text);
+                setPhone_number(text);
               }}
-              onChangeFormattedText={(text) => {
-                setFormattedValue(text);
-              }}
-              autoFocus
             />
           </View>
           <ButtonUI
             onPress={() => {
-              console.log(value, formattedValue, valid);
-              const checkValid = phoneInput.current?.isValidNumber(value);
-              setShowMessage(true);
-              setValid(checkValid ? checkValid : false);
-              navigation.navigate("verifyOTP");
+              handleSubmit();
             }}
+            disabled={disbledLogin}
             title={"Log In"}
             textStyle={styles.txtBtnLogin}
-            btnStyle={styles.btnLogin}
+            btnStyle={[
+              styles.btnLogin,
+              ...(disbledLogin ? [styles.btnLoginDisbaled] : []),
+            ]}
           />
         </View>
       </TouchableWithoutFeedback>
@@ -152,6 +158,9 @@ const styles = StyleSheet.create({
     minHeight: 50,
     width: "100%",
     maxWidth: 480,
+  },
+  btnLoginDisbaled: {
+    backgroundColor: "#bababa",
   },
   txtBtnLogin: { color: "#fff", fontSize: 18 },
 });

@@ -1,72 +1,77 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
-import Threads from "./screens/Threads";
-import Messages from "./screens/Messages";
-import { Pressable } from "react-native";
-import { EditProfile } from "./screens/EditProfile";
-import { Profile } from "./screens/Profile";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Login } from "./screens/Login";
-import { VerifyOTP } from "./screens/VerifyOTP";
-import { Header } from "./components/header";
+import React, { useEffect, useState } from "react";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import messaging from "@react-native-firebase/messaging";
+import Screens from "./components/Screens";
+import Toast from "react-native-toast-message";
 
-const Stack = createNativeStackNavigator();
 export default function App() {
+  const [fcmToken, setFcmToken] = useState("");
+  // firebase notification part
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Authorization status:", authStatus);
+    }
+  };
+  // const showToast = () => {
+  //   Toast.show({
+  //     type: "success",
+  //     text1: "Hello",
+  //     text2: "This is some something 👋",
+  //   });
+  // };
+
+  useEffect(() => {
+    if (requestUserPermission()) {
+      // return the fcm token for the device
+      messaging()
+        .getToken()
+        .then((token) => {
+          // console.log(token);
+          setFcmToken(token);
+        });
+    } else {
+      console.log("Failed token status", authStatus);
+    }
+
+    // check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(async (remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            "Notification caused app to open from quit state:",
+            remoteMessage.notification
+          );
+        }
+      });
+    // assume a message-notification contains a "type" property in the data payload of the screen to open
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "Notification caused app to open from background state:",
+        remoteMessage.notification
+      );
+    });
+    //register background handler
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background!", remoteMessage);
+    });
+    // const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    //   console.log("Message handled in the foreground!", remoteMessage);
+    // });
+
+    // return unsubscribe;
+  }, []);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="notifications">
-        <Stack.Screen
-          name="login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="verifyOTP"
-          component={VerifyOTP}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({
-            header: () => (
-              <Header title={"Notifications"} navigation={navigation} />
-            ),
-          })}
-          name="notifications"
-          component={Threads}
-        />
-        <Stack.Screen
-          name="messages"
-          component={Messages}
-          options={() => ({
-            headerStyle: { backgroundColor: "#35374B" },
-            headerTintColor: "#fff",
-            title: "Messages",
-          })}
-        />
-        <Stack.Screen
-          name="profile"
-          component={Profile}
-          options={({ navigation }) => ({
-            title: "Profile",
-            headerStyle: { backgroundColor: "#35374B" },
-            headerTintColor: "#fff",
-            headerRight: () => (
-              <Pressable onPress={() => navigation.navigate("notifications")}>
-                <Icon name="sign-out" size={30} color="#fff" />
-              </Pressable>
-            ),
-          })}
-        />
-        <Stack.Screen
-          options={() => ({
-            headerStyle: { backgroundColor: "#35374B" },
-            headerTintColor: "#fff",
-            title: "Edit profile",
-          })}
-          name="editProfile"
-          component={EditProfile}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <Screens fcmToken={fcmToken} />
+      <Toast />
+    </Provider>
   );
 }

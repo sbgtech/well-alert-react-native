@@ -2,30 +2,38 @@ import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import ButtonUI from "../components/ButtonUI";
 import AvatarUI from "../components/AvatarUI";
+import { useSelector } from "react-redux";
+import Moment from "moment";
 
 export const Profile = ({ navigation }) => {
+  const auth = useSelector((state) => state.user);
+  const { name, email, country_code, phone_number, createdAt } = auth.user;
+  const created = Moment(createdAt).format("lll");
   return (
     <View style={styles.container}>
       <AvatarUI
-        name={"Dhaker Salah"}
+        name={auth.user.name ? auth.user.name : auth.user.phone_number}
         avatarStyle={styles.itemAvatar}
         size={80}
       />
       <View>
-        <Text style={styles.label}>First name</Text>
-        <Text style={styles.text}>Dhaker</Text>
-      </View>
-      <View>
-        <Text style={styles.label}>Last name</Text>
-        <Text style={styles.text}>Salah</Text>
+        <Text style={styles.label}>Name</Text>
+        <Text style={styles.text}>{name}</Text>
       </View>
       <View>
         <Text style={styles.label}>Email</Text>
-        <Text style={styles.text}>Dhaker@gmail.com</Text>
+        <Text style={styles.text}>{email}</Text>
       </View>
       <View>
         <Text style={styles.label}>Phone number</Text>
-        <Text style={styles.text}>+156478865</Text>
+        <Text style={styles.text}>
+          {country_code}
+          {phone_number}
+        </Text>
+      </View>
+      <View>
+        <Text style={styles.label}>Created at</Text>
+        <Text style={styles.text}>{created}</Text>
       </View>
       <ButtonUI
         onPress={() => navigation.navigate("editProfile")}

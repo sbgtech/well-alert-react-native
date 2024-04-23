@@ -1,8 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import AvatarUI from "./AvatarUI";
+import { useSelector } from "react-redux";
+import { StatusBar } from "expo-status-bar";
 
 export const Header = ({ title, navigation }) => {
+  const auth = useSelector((state) => state.user);
+  if (!auth.user) {
+    return null;
+  }
   return (
     <View
       style={{
@@ -17,13 +23,21 @@ export const Header = ({ title, navigation }) => {
         backgroundColor: "#35374B",
       }}
     >
+      <StatusBar style="light" />
       <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
         {title}
       </Text>
 
-      <Pressable onPress={() => navigation.navigate("profile")}>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.5 : 1,
+          },
+        ]}
+        onPress={() => navigation.navigate("profile")}
+      >
         <AvatarUI
-          name={"Dhaker Salah"}
+          name={auth.user.name ? auth.user.name : auth.user.phone_number}
           avatarStyle={styles.itemAvatar}
           size={45}
         />

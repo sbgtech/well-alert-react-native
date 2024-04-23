@@ -50,7 +50,7 @@ export const threads = [
       },
     ],
     _count: {
-      message: 1,
+      message: 0,
     },
   },
   {
