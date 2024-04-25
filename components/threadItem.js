@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     color: "#fff",
     borderRadius: 10,
+    overflow: "hidden",
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
