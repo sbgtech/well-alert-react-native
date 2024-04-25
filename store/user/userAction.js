@@ -30,13 +30,10 @@ export const login =
       }, 500);
     } catch (error) {
       console.log(error.message);
-      const err = error.response.data.error;
-      let msg = "An error came up";
+      const err = error?.response?.data.error;
+      let msg = error.message;
       if ("phone_number" in err) {
         msg = err.phone_number;
-      }
-      if (typeof err === "string") {
-        msg = err;
       }
       Alert.alert("Error", msg);
       dispatch({
@@ -128,7 +125,7 @@ export const logout = () => async (dispatch) => {
       type: TYPE.CLEAR_MSG,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log("gggg ", error.response.data.error);
   }
 };
 

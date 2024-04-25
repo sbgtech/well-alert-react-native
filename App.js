@@ -4,6 +4,7 @@ import { store } from "./store";
 import messaging from "@react-native-firebase/messaging";
 import Screens from "./components/Screens";
 import Toast from "react-native-toast-message";
+import { Alert } from "react-native";
 
 export default function App() {
   const [fcmToken, setFcmToken] = useState("");
@@ -30,10 +31,15 @@ export default function App() {
     if (requestUserPermission()) {
       // return the fcm token for the device
       messaging()
-        .getToken()
+        .registerDeviceForRemoteMessages()
+        .then(() => messaging().getToken())
         .then((token) => {
           // console.log(token);
           setFcmToken(token);
+          Alert.alert("fcm", token);
+        })
+        .catch((err) => {
+          Alert.alert("fcm err", err.message);
         });
     } else {
       console.log("Failed token status", authStatus);
