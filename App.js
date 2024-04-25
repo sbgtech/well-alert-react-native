@@ -39,7 +39,12 @@ export default function App() {
           Alert.alert("fcm", token);
         })
         .catch((err) => {
-          Alert.alert("fcm err", err.message);
+          Alert.alert(
+            "fcm err",
+            err.message,
+            messaging().isDeviceRegisteredForRemoteMessages(),
+            messaging().getAPNSToken()
+          );
         });
     } else {
       console.log("Failed token status", authStatus);
