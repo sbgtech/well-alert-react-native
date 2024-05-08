@@ -47,6 +47,14 @@ export default function Screens({ fcmToken }) {
       }
     }
     prepare();
+    // assume a message-notification contains a "type" property in the data payload of the screen to open
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "Notification caused app to open from background state:",
+        remoteMessage.notification
+      );
+      dispatch(getThreads());
+    });
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log("Message handled in the foreground!", remoteMessage);
       if (remoteMessage.notification.title !== "OTP") {
